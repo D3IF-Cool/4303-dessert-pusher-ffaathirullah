@@ -82,16 +82,16 @@ class MainActivity : AppCompatActivity() {
         // Set the TextViews to the right values
         binding.revenue = revenue
         binding.amountSold = dessertsSold
-
+        binding.revenue = revenue
+        binding.amountSold = dessertsSold
         // Make sure the correct dessert is showing
         binding.dessertButton.setImageResource(currentDessert.imageId)
 
 
         if (savedInstanceState != null) {
             // Show the next dessert
-            showCurrentDessert()
-            revenue = savedInstanceState.getInt(KEY_REVENUE, 0)
-            dessertsSold = savedInstanceState.getInt(KEY_DESSERT_SOLD, 0)
+            binding.revenue = savedInstanceState.getInt(KEY_REVENUE)
+            binding.amountSold = savedInstanceState.getInt(KEY_DESSERT_SOLD)
             showCurrentDessert()
         }
     }
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun onDessertClicked() {
 
-        revenue += currentDessert.price
+       revenue += currentDessert.price
         dessertsSold++
         binding.revenue = revenue
         binding.amountSold = dessertsSold
@@ -192,7 +192,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(KEY_REVENUE, revenue)
+        outState.putInt(KEY_REVENUE,revenue)
         outState.putInt(KEY_DESSERT_SOLD, dessertsSold)
     }
 
