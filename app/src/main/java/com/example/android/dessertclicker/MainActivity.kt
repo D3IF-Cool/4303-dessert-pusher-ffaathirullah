@@ -28,6 +28,8 @@ import androidx.databinding.DataBindingUtil
 import com.example.android.dessertclicker.databinding.ActivityMainBinding
 import timber.log.Timber
 
+const val KEY_REVENUE = "revenue_key"
+const val KEY_DESSERT_SOLD = "dessert_sold_key"
 class MainActivity : AppCompatActivity() {
 
     private var revenue = 0
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     // Contains all the views
     private lateinit var binding: ActivityMainBinding
     private lateinit var dessertTimer: DessertTimer
+
 
     /** Dessert Data **/
 
@@ -73,6 +76,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.dessertButton.setOnClickListener {
             onDessertClicked()
+
         }
         dessertTimer = DessertTimer(this.lifecycle)
         // Set the TextViews to the right values
@@ -83,6 +87,13 @@ class MainActivity : AppCompatActivity() {
         binding.dessertButton.setImageResource(currentDessert.imageId)
 
 
+        if (savedInstanceState != null) {
+            // Show the next dessert
+            showCurrentDessert()
+            revenue = savedInstanceState.getInt(KEY_REVENUE, 0)
+            dessertsSold = savedInstanceState.getInt(KEY_DESSERT_SOLD, 0)
+            showCurrentDessert()
+        }
     }
 
     /**
@@ -90,15 +101,13 @@ class MainActivity : AppCompatActivity() {
      */
     private fun onDessertClicked() {
 
-        // Update the score
         revenue += currentDessert.price
         dessertsSold++
-
         binding.revenue = revenue
         binding.amountSold = dessertsSold
-
         // Show the next dessert
         showCurrentDessert()
+
     }
 
     /**
@@ -118,10 +127,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         // If the new dessert is actually different than the current dessert, update the image
-        if (newDessert != currentDessert) {
-            currentDessert = newDessert
-            binding.dessertButton.setImageResource(newDessert.imageId)
-        }
     }
 
     /**
@@ -185,5 +190,10 @@ class MainActivity : AppCompatActivity() {
         Timber.i("onRestart Called")
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_REVENUE, revenue)
+        outState.putInt(KEY_DESSERT_SOLD, dessertsSold)
+    }
 
 }
